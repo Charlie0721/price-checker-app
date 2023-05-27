@@ -1,0 +1,7 @@
+{
+  "name": "app-price-checker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
