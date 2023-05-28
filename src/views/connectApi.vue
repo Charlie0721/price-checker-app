@@ -198,7 +198,12 @@ export default defineComponent({
           const alert = await alertController.create({
             cssClass: "my-custom-class",
             header: "Atención !!!",
-            message: "error" + err+ err.message,
+            message: `${err} ${err.message}
+            ${err.config.data} 
+            ${err.config.url}
+            ${err.stack}`,
+            
+
             buttons: ["OK"],
           });
           await alert.present();
