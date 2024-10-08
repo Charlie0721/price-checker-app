@@ -81,8 +81,8 @@ import {
   IonInput,
   IonItem,
 } from "@ionic/vue";
-import { urlAPiI } from '@/interfaces/connectioApi.interface';
-import axios from 'axios';
+import { urlAPiI } from "@/interfaces/connectioApi.interface";
+import axios from "axios";
 export default defineComponent({
   name: "Tab1Page",
   components: {
@@ -125,22 +125,39 @@ export default defineComponent({
       const api1 = `${this.dataConnections.header}${iP1}${this.dataConnections.pointOne}${iP2}${this.dataConnections.pointTwo}${iP3}${this.dataConnections.pointThree}${iP4}${this.dataConnections.twoPoints}${this.dataConnections.port}`;
       await axios
         .post(`${api1}/connect-api`, this.dataConnections)
-        .then(async(data) => {
-          const alert = await alertController.create({
-          cssClass: "my-custom-class",
-          header: "Atención !!!",
-        
-          message: `Conectandose a  ${ api1}`,
-          buttons: ["OK"],
-        });
-        await alert.present()
-          console.log(data.data);
+
+        .then(async (data) => {
+          if (data) {
+            const alert = await alertController.create({
+              cssClass: "my-custom-class",
+              header: "Atención !!!",
+              message: "conectandose a: " + api1,
+              buttons: ["OK"],
+            });
+            await alert.present();
+            console.log(data.data);
+          }
+
 
           localStorage.setItem("connection", JSON.stringify(api1));
 
           this.getConnectionstoApi();
         })
-        .catch((err) => console.log(err));
+        .catch(async (err) => {
+          const alert = await alertController.create({
+            cssClass: "my-custom-class",
+            header: "Atención !!!",
+            message: `${err} ${err.message}
+            ${err.config.data} 
+            ${err.config.url}
+            ${err.stack}`,
+
+
+            buttons: ["OK"],
+          });
+          await alert.present();
+          console.log(err);
+        });
     },
     async getConnectionstoApi() {
       if (localStorage.getItem("connection")) {

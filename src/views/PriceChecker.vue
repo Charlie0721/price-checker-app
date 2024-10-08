@@ -20,12 +20,12 @@
                 </ion-item>
 
             </ion-card>
-            <ion-card>
+            <ion-card v-if="productPrices.length > 0">
 
 
                 <ion-card-content>
 
-                    <h1 class="letter-color large-text" v-for="item in productPrices" :key="item.barcode">
+                    <!-- <h1 class="letter-color large-text" v-for="item in productPrices" :key="item.barcode">
                         <small>{{ item.descripcion }}</small>
                         <br />
                         <small>$ {{ new Intl.NumberFormat("de-DE").format(priceWithIco = item.precioventa +
@@ -33,9 +33,27 @@
                         <br />
                         <small>{{ item.barcode }}</small>
                         <br />
-                        <small>{{ item.codigo }}</small>
-                        <br />
-                    </h1>
+                     
+                    </h1> -->
+
+                    <div v-for="item in productPrices" :key="item.barcode"
+                        style="text-align: center; margin-bottom: 20px;">
+                        <h1 class="letter-color large-text">
+                            {{ item.descripcion }}
+                        </h1>
+                        <h1 class="letter-color large-text">
+                            $ {{ new Intl.NumberFormat("de-DE").format(priceWithIco = item.precioventa + item.valorico)
+                            }}
+                        </h1>
+                        <small>
+                            <h1 class="letter-color large-text">
+
+                                {{ item.barcode }}
+                            </h1>
+
+                        </small>
+                    </div>
+
 
 
                     <h1 class="letter-color large-text" v-if="totalPrices">
@@ -45,7 +63,7 @@
                             }}
                         </small>
                     </h1>
-                    <h1 class="letter-color" v-if="amountItems">
+                    <h1 class="letter-color large-text" v-if="amountItems">
                         <small>Cantidad de Productos: {{ amountItems }}</small>
                         <small> </small>
                     </h1>
@@ -182,7 +200,7 @@ export default defineComponent({
 }
 
 .large-text {
-    font-size: 2.5em;
+    font-size: 4.0em;
     /* Ajusta el tamaño como desees */
 }
 
@@ -209,6 +227,20 @@ input {
     /* Centrando el input con márgenes automáticos y un poco de espacio vertical */
 }
 
+.price {
+    font-size: 2.5em;
+    color: #82230d;
+    /* Color corporativo para el precio */
+    margin: 10px 0;
+    /* Espaciado entre el precio y los demás elementos */
+}
+
+.barcode {
+    font-size: 1.5em;
+    color: #82230d;
+    /* Color más claro para el código de barras */
+}
+
 /* Cambiar el color del borde al enfocar */
 input:focus {
     border-color: #82230d;
@@ -219,7 +251,7 @@ input:focus {
 
 /* Cambiar el fondo cuando el input está vacío */
 input::placeholder {
-    color:#82230d;
+    color: #82230d;
     /* Color del texto del placeholder */
     opacity: 2;
     /* Asegura que el placeholder se muestre claramente */
