@@ -125,8 +125,15 @@ export default defineComponent({
       const api1 = `${this.dataConnections.header}${iP1}${this.dataConnections.pointOne}${iP2}${this.dataConnections.pointTwo}${iP3}${this.dataConnections.pointThree}${iP4}${this.dataConnections.twoPoints}${this.dataConnections.port}`;
       await axios
         .post(`${api1}/connect-api`, this.dataConnections)
-        .then((data) => {
-          console.log(this.dataConnections);
+        .then(async(data) => {
+          const alert = await alertController.create({
+          cssClass: "my-custom-class",
+          header: "Atención !!!",
+        
+          message: `Conectandose a  ${ api1}`,
+          buttons: ["OK"],
+        });
+        await alert.present()
           console.log(data.data);
 
           localStorage.setItem("connection", JSON.stringify(api1));

@@ -18,6 +18,7 @@
     "@capacitor/status-bar": "5.0.2",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
+    "app-price-checker": "file:",
     "axios": "^1.4.0",
     "core-js": "^3.6.5",
     "ionicons": "^7.0.0",

@@ -14,8 +14,9 @@
                 <img class="edit-image" src="@/icon/logo_header.png" />
                 <h2 class="letter-color"> CONEXION POS CHECKER </h2>
                 <ion-item>
-                    <ion-input type="text" :value="barcode.barcode" @input="barcode.barcode = $event.target.value"
-                        placeholder="Código de barras" :clear-input="true" @keypress.enter="searchByBarcode()"></ion-input>
+
+                    <input ref="barcodeInput" type="text" :value="barcode.barcode" @input="handleInput"
+                        placeholder="Código de barras" @keypress.enter="searchByBarcode" />
                 </ion-item>
 
             </ion-card>
@@ -24,22 +25,20 @@
 
                 <ion-card-content>
 
-                    <h1 class="letter-color" v-for="item in productPrices" :key="item.barcode">
+                    <h1 class="letter-color large-text" v-for="item in productPrices" :key="item.barcode">
                         <small>{{ item.descripcion }}</small>
                         <br />
-
-                        <small>
-
-                            $ {{
-                                new Intl.NumberFormat("de-DE").format(priceWithIco = item.precioventa + item.valorico)
-                            }}</small><br />
+                        <small>$ {{ new Intl.NumberFormat("de-DE").format(priceWithIco = item.precioventa +
+                            item.valorico) }}</small>
+                        <br />
                         <small>{{ item.barcode }}</small>
                         <br />
                         <small>{{ item.codigo }}</small>
                         <br />
                     </h1>
 
-                    <h1 class="letter-color" v-if="totalPrices">
+
+                    <h1 class="letter-color large-text" v-if="totalPrices">
                         <small>
                             Valor Total: ${{
                                 new Intl.NumberFormat("de-DE").format(totalPrices)
@@ -74,7 +73,7 @@ import {
     IonCardContent,
     IonLabel,
     IonButton,
-    IonInput,
+    //  IonInput,
     IonItem,
 } from "@ionic/vue";
 import { PriceChecker } from '../services/prices-checker'
@@ -83,7 +82,7 @@ export default defineComponent({
     name: "PriceChecker",
     components: {
         IonPage,
-        IonInput,
+        // IonInput,
         //  IonLabel,
         IonHeader,
         IonToolbar,
@@ -100,8 +99,17 @@ export default defineComponent({
             totalPrices: null,
             amountItems: 0,
             searchItem: false,
-            priceWithIco: 0
+            priceWithIco: 0,
+
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            const inputElement = this.$refs.barcodeInput as HTMLInputElement;
+            if (inputElement) {
+                inputElement.focus();
+            }
+        }, 100);
     },
     methods: {
         async searchByBarcode() {
@@ -141,6 +149,14 @@ export default defineComponent({
                 await alert.present();
             }
         },
+        handleInput(event: Event) {
+            const target = event.target as HTMLInputElement;
+            this.barcode.barcode = target.value;
+
+            if (target.value === '') {
+                target.value = '';
+            }
+        },
         reloadPage() {
             location.reload();
         },
@@ -155,9 +171,6 @@ export default defineComponent({
     text-align: center;
 }
 
-.custom-input-container .native-input {
-    border-radius: 10px;
-}
 
 .edit-image {
     display: block;
@@ -166,5 +179,49 @@ export default defineComponent({
     width: 7%;
     max-height: 7%;
 
+}
+
+.large-text {
+    font-size: 2.5em;
+    /* Ajusta el tamaño como desees */
+}
+
+input {
+    border: 2px solid #82230d;
+    /* Cambia el color del borde al color de .letter-color */
+    border-radius: 20px;
+    /* Bordes redondeados */
+    padding: 15px;
+    /* Espaciado interno */
+    font-size: 16px;
+    /* Tamaño de fuente */
+    width: calc(100% - 40px);
+    /* Ancho casi total de la pantalla (restando márgenes) */
+    max-width: 970px;
+    /* Aumentar ancho máximo para que sea más ancho */
+    transition: border-color 0.3s;
+    /* Transición suave para el borde */
+    box-sizing: border-box;
+    /* Incluye el padding y el borde en el tamaño total */
+    display: block;
+    /* Para centrar correctamente el input */
+    margin: 20px auto;
+    /* Centrando el input con márgenes automáticos y un poco de espacio vertical */
+}
+
+/* Cambiar el color del borde al enfocar */
+input:focus {
+    border-color: #82230d;
+    /* Color del borde al tener foco */
+    outline: none;
+    /* Quitar el borde azul del navegador */
+}
+
+/* Cambiar el fondo cuando el input está vacío */
+input::placeholder {
+    color:#82230d;
+    /* Color del texto del placeholder */
+    opacity: 2;
+    /* Asegura que el placeholder se muestre claramente */
 }
 </style>
